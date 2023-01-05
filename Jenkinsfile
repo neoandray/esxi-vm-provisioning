@@ -1,6 +1,5 @@
 
-//@Library('jenkins-shared-libraries').vmware
-library('jenkins-shared-libraries').vmware
+@Library('esxi-provisioning-libraries')
 def  physicalHosts    = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
