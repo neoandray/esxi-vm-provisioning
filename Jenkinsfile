@@ -1,5 +1,5 @@
 
-@Library('jenkins-shared-libraries/vmware') _
+@Library('jenkins-shared-libraries') _
 def  physicalHosts    = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
@@ -38,7 +38,7 @@ pipeline{
         
         steps{
             script{
-             def  vmInformation    = getVMInfo(params.Environment)
+             def  vmInformation    =  vmware.getVMInfo(params.Environment)
            
              vmInformation['hosts'].each{
 
@@ -47,14 +47,18 @@ pipeline{
              }
              def previousHost = null
              def datastoreArray = []
-            vmInformation['hostDatastoreMap'].each{
+             vmInformation['hostDatastoreMap'].each{
 
                  if(!previousHost||(previousHost==it.HostName)){
+
                     datastoreArray.push( it.DataStoreName)
+
                  }else{
+
                     hostDatastoreMap[previousHost] = datastoreArray
                     datastoreArray =[]
                     datastoreArray.push( it.DataStoreName)
+
                  }   
                  previousHost=it.HostName            
              }
@@ -68,7 +72,7 @@ pipeline{
                  }else{
                     hostNetworkMap[previousHost] = networkArray
                     networkArray =[]
-                     networkArray.push( it.NetworkName)
+                    networkArray.push( it.NetworkName)
                  }   
                  previousHost=it.HostName            
              }
@@ -145,7 +149,7 @@ pipeline{
                     
             }else if(params.UseDefaults.toLowerCase()=="no"){ 
                 
-                def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
+                def vmHostMap = vmware.getVMHostMap(vmName,vmCount,physicalHosts)
 
                vmHostMap = readJSON (text :vmHostMap)
                 echo vmHostMap
