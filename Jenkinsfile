@@ -144,7 +144,7 @@ pipeline{
                             vmSpecsMap["template"]          =   params.OS.toString().toLowerCase() == "windows"? "CMTeam_Win10x64": "CMTeam_U2004x64_Template"
                             vmSpecsMap["storageFormat"]     =   "thin"
                         }
-                        updatedVMSpecifications.Add(vmSpecsMap);
+                        updatedVMSpecifications = (vmSpecsMap);
                 }
                     
             }else if(params.UseDefaults.toLowerCase()=="no"){ 
