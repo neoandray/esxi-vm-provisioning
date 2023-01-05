@@ -124,7 +124,7 @@ pipeline{
                 for( def k=0; k<vmCount; k++){
                         def natIndex = k+1
                         def vmSpecsMap = [:];
-                        vmSpecsMap["name"]                  = natIndex.toString().length==1?"${vmName}00${natIndex}":"${vmName}0${natIndex}"
+                        vmSpecsMap["name"]                  = natIndex.toString().length()==1?"${vmName}00${natIndex}":"${vmName}0${natIndex}"
                         vmSpecsMap["nmCpu"]                 = params.CPU
                         vmSpecsMap["memoryGb"]              = params.RAM
                         vmSpecsMap["networkName"]           = 'VM Network'
