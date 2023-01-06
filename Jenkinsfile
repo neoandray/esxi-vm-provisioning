@@ -253,7 +253,7 @@ pipeline{
                                     vmSpecsMap["storageFormat"]     =   "thin"
                                 }
                                 updatedVMSpecifications = (vmSpecsMap);
-                                
+
                         }
                             
                     }else if(params.MicroManage.toLowerCase()=="yes"){ 
@@ -302,9 +302,9 @@ pipeline{
                                                     ] ,
                                                     script:[
                                                         classpath: [],   sandbox: true, 
-                                                        script: """
-                                                        return ["${params.each{it.key}}"]   
-                                                        """.stripIndent()
+                                                        script: /
+                                                        return ${hostDatastoreMap[${serverName}_PhysicalHost]}
+                                                       /.stripIndent()
                                                     ]
                                                 ]
                                     ]
@@ -319,7 +319,8 @@ pipeline{
                                     [   
                                         separator(name: "${serverName}_NIC${i}_separator", sectionHeader: "${serverName}_NIC${index} Details",sectionHeaderStyle: subHeaderStyle),
                                         ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
-                                            name: "${serverName}_NIC${index}",   referencedParameters: "${serverName}_PhysicalHost",
+                                            name: "${serverName}_NIC${index}"
+                                            ,   referencedParameters: "${serverName}_PhysicalHost",
                                             script: [$class: 'GroovyScript',  
                                                         fallbackScript: [
                                                         classpath: [],  sandbox: true, 
@@ -329,11 +330,10 @@ pipeline{
                                                         ] ,
                                                         script:[
                                                             classpath: [],   sandbox: true, 
-                                                            script: """
-                                                                def host       = "${serverName}_PhysicalHost"
-                                                                                    
-                                                                    return [parameter]
-                                                            """.stripIndent()
+                                                        classpath: [],   sandbox: true, 
+                                                        script: /
+                                                        return ${hostNetworkMap[${serverName}_PhysicalHost]}
+                                                       /.stripIndent()
                                                         ]
                                                     ]
                                         ]
