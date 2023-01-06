@@ -161,6 +161,8 @@ pipeline{
                         previousHost=it.HostName            
                     }
 
+                    print(hostDatastoreMap)
+
                     
                     vmInformation['templates'].each{
 
@@ -182,6 +184,7 @@ pipeline{
                         previousHost=it.HostName            
                     }
 
+                    print(hostNetworkMap)
 
                     def vmSeparatorHeaderStyle = """
                         background-color: #3c54cf;
@@ -273,7 +276,7 @@ pipeline{
                             //def vmHostName = vmHostMap[vmID]
 
                         // echo "${vmHostName} has been chosen as the host of  ${serverName}"
-                        
+                           
                             vmConfigInputParameters.addAll(
                                 [
                                     separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
@@ -305,7 +308,7 @@ pipeline{
                                                         script: """
                                                         def index   = "${serverName}_PhysicalHost"
                                                         def options = "${hostDatastoreMap['172.22.39.38']}"
-                                                        return "${hostDatastoreMap['172.22.39.38']}"
+                                                        return ["${hostDatastoreMap['172.22.39.38']}"]
                                                        """.stripIndent()
                                                     ]
                                                 ]
