@@ -4,27 +4,19 @@ def  physicalHosts    = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
 
-pipeline{
-    
-    agent{
-        
-        docker{
-            image 'vmware-powercli-tools'
-            args  '-u 0'
-            label 'linux'
-        }
-    }
-	parameters{
-	 string(name:'ServerName', defaultValue:'', description:'The name of the virtual server  (if  only one server is to be created ) or the prefix of the names of the virtual server to be created ( numbers would be appended sequentially to the prefix starting from 1)')
-	 choice(name:'OperatingSystem', choices: ['Windows','Linux'], description: 'Specify the operating system type of each server')
-	 choice(name:'ServerCount',choices: [1,2,3,4,5,6,7,8,9,10], description:'The number of servers to be created')
-	 choice(name:'DiskCount',choices: [1,2,3,4],description: 'The  number of hard drives to be added to each server')	
-     choice(name:'DiskSize',choices: [100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500],description: 'The size of each hard drive in GB to be added to the server')	
-	 choice(name:'CPU',choices: [1,2,4,6,8,10,12,14,16,18,20,22,24,26], description:'The number of virtual cpus to be added to each server created')
-     choice(name:'RAM',choices: [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64], description:'The size of the RAM (physical memory) in GB of each server to be created')	
-	 choice(name:'NetworkInterfaces',choices: [1,2,3,4], description:'The number of NICs (Network Interface cards to be created) for each server')	
-	 choice(name:'Environment',choices: ['Test' ,'Production','Others'],description:'The VCenter server that manages the hosts where the server(s) will be created')
-     [$class: 'DynamicReferenceParameter', 
+
+ properties([
+    parameters([
+     string(name:'ServerName', defaultValue:'', description:'The name of the virtual server  (if  only one server is to be created ) or the prefix of the names of the virtual server to be created ( numbers would be appended sequentially to the prefix starting from 1)')
+	 ,choice(name:'OperatingSystem', choices: ['Windows','Linux'], description: 'Specify the operating system type of each server')
+	 ,choice(name:'ServerCount',choices: [1,2,3,4,5,6,7,8,9,10], description:'The number of servers to be created')
+	 ,choice(name:'DiskCount',choices: [1,2,3,4],description: 'The  number of hard drives to be added to each server')	
+     ,choice(name:'DiskSize',choices: [100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500],description: 'The size of each hard drive in GB to be added to the server')	
+	 ,choice(name:'CPU',choices: [1,2,4,6,8,10,12,14,16,18,20,22,24,26], description:'The number of virtual cpus to be added to each server created')
+     ,choice(name:'RAM',choices: [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64], description:'The size of the RAM (physical memory) in GB of each server to be created')	
+	 ,choice(name:'NetworkInterfaces',choices: [1,2,3,4], description:'The number of NICs (Network Interface cards to be created) for each server')	
+	 ,choice(name:'Environment',choices: ['Test' ,'Production','Others'],description:'The VCenter server that manages the hosts where the server(s) will be created')
+     ,[$class: 'DynamicReferenceParameter', 
         choiceType: 'ET_FORMATTED_HTML',
 		omitValueField: true,
         description:'The VCenter server that manages the hosts where the server(s) will be created',
@@ -53,7 +45,7 @@ pipeline{
             ]
         ]
     ]
-		   [$class: 'DynamicReferenceParameter', 
+	, [$class: 'DynamicReferenceParameter', 
         choiceType: 'ET_FORMATTED_HTML',
 		omitValueField: true,
         description:'The username for connecting to the VCenter Server',
@@ -82,7 +74,7 @@ pipeline{
             ]
         ]
     ]
-	   [$class: 'DynamicReferenceParameter', 
+	,[$class: 'DynamicReferenceParameter', 
         choiceType: 'ET_FORMATTED_HTML',
 		omitValueField: true,
         description:'The password for connecting to the VCenter server',
@@ -111,8 +103,22 @@ pipeline{
             ]
         ]
     ]
-     choice(name:'MicroMangage',choices: ['YES','NO'], description:"Select 'Yes' to make changes to some additional/advanced VM configurations.")
-	}
+    ,choice(name:'MicroMangage',choices: ['YES','NO'], description:"Select 'Yes' to make changes to some additional/advanced VM configurations.")
+
+    ])
+ ])
+
+pipeline{
+    
+    agent{
+        
+        docker{
+            image 'vmware-powercli-tools'
+            args  '-u 0'
+            label 'linux'
+        }
+    }
+
     environment{    
        vCenterServer7='172.22.38.56' 
        vCenterCred7 = credentials('VCenter7.0')
