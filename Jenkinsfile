@@ -248,9 +248,9 @@ pipeline{
                 }else if(params.MicroManage.toLowerCase()=="Yes"){ 
                     
                     def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
-
-                vmHostMap = readJSON (text :vmHostMap)
-                    echo vmHostMap
+                    println(vmHostMap)
+                    vmHostMap = readJSON (text :vmHostMap)
+                   
                     for( def k=0; k<vmCount; k++){
                         def indexNatural = k+1
                         def vmIndex= indexNatural
