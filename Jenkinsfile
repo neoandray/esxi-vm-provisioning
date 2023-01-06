@@ -138,7 +138,7 @@ pipeline{
                     vmInformation         =  getVMInfoOthers(params.VCenterServer,params.VCenterUser,params.VCenterPassword)
                 }
             
-               echo vmInformation
+                print vmInformation
                 vmInformation['hosts'].each{
 
                     physicalHosts.add(it.Name)
@@ -249,7 +249,7 @@ pipeline{
                 }else if(params.MicroManage.toLowerCase()=="Yes"){ 
                     
                     def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
-                    echo vmHostMap
+                    print vmHostMap
                     vmHostMap = readJSON (text :vmHostMap)
                    
                     for( def k=0; k<vmCount; k++){
