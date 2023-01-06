@@ -103,7 +103,7 @@ def  hostNetworkMap   = [:]
             ]
         ]
     ]
-    ,choice(name:'MicroManage',choices: ['YES','NO'], description:"Select 'Yes' to make changes to some additional/advanced VM configurations.")
+    ,choice(name:'MicroManage',choices: ['YES','NO'], description:"Select 'Yes' to make changes to some additional/advanced Server configurations.")
 
     ])
  ])
@@ -217,7 +217,7 @@ pipeline{
                 def updatedVMSpecifications  = [];
                 def vmConfigInputParameters   = []
                 
-                if(params.MicroMangage.toLowerCase()=="no"){ 
+                if(params.MicroManage.toLowerCase()=="no"){ 
                     for( def k=0; k<vmCount; k++){
                             def natIndex = k+1
                             def vmSpecsMap = [:];
