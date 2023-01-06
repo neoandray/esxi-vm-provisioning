@@ -308,7 +308,7 @@ pipeline{
                                                         script: """
                                                         def index   = "${serverName}_PhysicalHost"
                                                        
-                                                        return ["${hostDatastoreMap['172.22.39.38'].split()}"]
+                                                        return [${hostDatastoreMap['172.22.39.38']}]
                                                        """.stripIndent()
                                                     ]
                                                 ]
