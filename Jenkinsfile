@@ -306,10 +306,45 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        def index        = "${serverName}_PhysicalHost"
-                                                        def datastoreMaps = "${hostDatastoreMap}"
-                                                       
-                                                        return [datastoreMaps]
+                                                        def index         = ${serverName}_PhysicalHost
+                                                        def datastoreMaps = "${hostDatastoreMap}"                                                   
+                                                        def originalString = datastoreMaps
+                                                        optionString = originalString.substring(1,originalString.length() -1)
+
+                                                        def hosts = []
+                                                        def datastores  =[]
+                                                        def hostString  = null;
+                                                        def datastoreString = "";
+                                                        def hostDatastoreMap =[:]
+
+                                                        def indexOfColon      = optionString.indexOf(':') ;
+                                                        def indexOfLastComma  = 0
+
+                                                        while(indexOfColon> 0){
+
+                                                        println(indexOfLastComma)
+                                                        println(indexOfColon)
+                                                        hostString =  optionString.substring(indexOfLastComma,indexOfColon)
+                                                        if(hostString){
+                                                            hosts.push(hostString.trim())
+                                                        }
+                                                        optionString = optionString.substring(indexOfColon+1)
+                                                        indexOfLastComma =optionString.indexOf(']') ;
+                                                        if(indexOfLastComma > 0){
+                                                        datastoreString= optionString.substring(1,indexOfLastComma)
+                                                        if(datastoreString){
+                                                        datastores.push(datastoreString) 
+                                                        }
+                                                        
+                                                        hostDatastoreMap[hostString] =datastoreString
+                                                        }
+                                                        
+                                                        indexOfLastComma+=2
+                                                        indexOfColon = optionString.indexOf(':') ;
+
+                                                        }
+ 
+                                                        return [hostDatastoreMap[index]]
                                                        """.stripIndent()
                                                     ]
                                                 ]
