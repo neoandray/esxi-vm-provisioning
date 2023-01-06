@@ -1,6 +1,7 @@
 
 @Library('esxi-provisioning-libraries') _
 def  physicalHosts    = []
+def  vmTemplates      = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
 
@@ -160,6 +161,13 @@ pipeline{
                         previousHost=it.HostName            
                     }
 
+                    
+                    vmInformation['templates'].each{
+
+                            vmTemplates.add(it.Name)
+
+                    }
+
                     previousHost = null
                     def networkArray = []
                     vmInformation['hostNetworkMap'].each{
@@ -246,26 +254,27 @@ pipeline{
                         
                 }else if(params.MicroManage.toLowerCase()=="Yes"){ 
                     
-                    def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
-                    print vmHostMap
-                    vmHostMap = readJSON (text :vmHostMap)
+                  //  def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
+                    
+                  //  vmHostMap = readJSON (text :vmHostMap)
                    
                     for( def k=0; k<vmCount; k++){
                         def indexNatural = k+1
-                        def vmIndex= indexNatural
-                        def vmSpecsMap = [:]
-                        def vmID = "Server${indexNatural}"
-                        def serverName = indexNatural <9 ?"${vmName}00${indexNatural}":"${vmName}0${indexNatural}"
+                        def vmIndex      = indexNatural
+                        def vmSpecsMap   = [:]
+                        def vmID         = "Server${indexNatural}"
+                        def serverName   = indexNatural <9 ?"${vmName}00${indexNatural}":"${vmName}0${indexNatural}"
                         //def vmHostName = vmHostMap[vmID]
 
                     // echo "${vmHostName} has been chosen as the host of  ${serverName}"
-                    /*
+                    
                         vmConfigInputParameters.addAll(
                             [
-                            separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
-                            ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
-                            ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
-                            ,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
+                                separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
+                                ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
+                                ,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
+                                ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
+                                ,choice(name:"${serverName}_VmTemplate", choices:vmTemplates , description: "Specify VM Template that would be used to create ${serverName}")
                             ]
                         )
 
@@ -328,9 +337,9 @@ pipeline{
 
                         }
 
-    */
+    
                     } 
-                //def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
+                 def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
             
                 }
 
