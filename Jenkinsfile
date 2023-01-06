@@ -305,7 +305,7 @@ pipeline{
                                                         script: """
                                                         def index   = ${serverName}_PhysicalHost
                                                         def options = ${hostDatastoreMap}
-                                                        return [options[index]]
+                                                        return [index]
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -336,7 +336,7 @@ pipeline{
                                                         script: """
                                                          def index   = ${serverName}_PhysicalHost
                                                         def options = ${hostNetworkMap}
-                                                        return [options[index]]
+                                                        return options
                                                        """.stripIndent()
                                                         ]
                                                     ]
