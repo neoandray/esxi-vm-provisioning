@@ -131,83 +131,81 @@ pipeline{
             
             steps{
                 script{
-                def  vmInformation    = null 
-                if(params.Environment in ['Test' ,'Production']){ 
-                    vmInformation        =  getVMInfo(params.Environment)
-                }else{
-                    vmInformation         =  getVMInfoOthers(params.VCenterServer,params.VCenterUser,params.VCenterPassword)
-                }
-            
-                print vmInformation
-                vmInformation['hosts'].each{
-
-                    physicalHosts.add(it.Name)
-                
-                }
-                def previousHost = null
-                def datastoreArray = []
-                vmInformation['hostDatastoreMap'].each{
-
-                    if(!previousHost||(previousHost==it.HostName)){
-
-                        datastoreArray.push( it.DataStoreName)
-
+                    def  vmInformation       = null 
+                    if(params.Environment    in ['Test' ,'Production']){ 
+                        vmInformation        =  getVMInfo(params.Environment)
                     }else{
+                        vmInformation        =  getVMInfoOthers(params.VCenterServer,params.VCenterUser,params.VCenterPassword)
+                    }
+                    vmInformation['hosts'].each{
 
-                        hostDatastoreMap[previousHost] = datastoreArray
-                        datastoreArray =[]
-                        datastoreArray.push( it.DataStoreName)
+                        physicalHosts.add(it.Name)
+                    
+                    }
+                    def previousHost = null
+                    def datastoreArray = []
+                    vmInformation['hostDatastoreMap'].each{
 
-                    }   
-                    previousHost=it.HostName            
-                }
+                        if(!previousHost||(previousHost==it.HostName)){
 
-                previousHost = null
-                def networkArray = []
-                vmInformation['hostNetworkMap'].each{
+                            datastoreArray.push( it.DataStoreName)
 
-                    if(!previousHost||(previousHost==it.HostName)){
-                        networkArray.push( it.NetworkName)
-                    }else{
-                        hostNetworkMap[previousHost] = networkArray
-                        networkArray =[]
-                        networkArray.push( it.NetworkName)
-                    }   
-                    previousHost=it.HostName            
-                }
+                        }else{
+
+                            hostDatastoreMap[previousHost] = datastoreArray
+                            datastoreArray =[]
+                            datastoreArray.push( it.DataStoreName)
+
+                        }   
+                        previousHost=it.HostName            
+                    }
+
+                    previousHost = null
+                    def networkArray = []
+                    vmInformation['hostNetworkMap'].each{
+
+                        if(!previousHost||(previousHost==it.HostName)){
+                            networkArray.push( it.NetworkName)
+                        }else{
+                            hostNetworkMap[previousHost] = networkArray
+                            networkArray =[]
+                            networkArray.push( it.NetworkName)
+                        }   
+                        previousHost=it.HostName            
+                    }
 
 
-                def vmSeparatorHeaderStyle = """
-                    background-color: #3c54cf;
-                    text-align: center;
-                    padding: 4px;
-                    color: #fffff;
-                    font-size: 18px;
-                    font-weight: normal;
-                    text-transform: uppercase;
-                    font-family: consolas,'Orienta', sans-serif;
-                    letter-spacing: 1px;
-                    font-style: bold;
-                """
+                    def vmSeparatorHeaderStyle = """
+                        background-color: #3c54cf;
+                        text-align: center;
+                        padding: 4px;
+                        color: #fffff;
+                        font-size: 18px;
+                        font-weight: normal;
+                        text-transform: uppercase;
+                        font-family: consolas,'Orienta', sans-serif;
+                        letter-spacing: 1px;
+                        font-style: bold;
+                    """
 
-                def subHeaderStyle  ="""
-                    text-align: lef;
-                    padding: 2px;
-                    color: #fffff;
-                    font-size: 16px;
-                    font-weight: normal;
-                    text-transform: uppercase;"""
-                String vmName         =  params.ServerName.toString()
-                int vmCount           =  Integer.parseInt(params.ServerCount)
-                int diskCount         =  Integer.parseInt(params.DiskCount)
-                int ramSizePerVM      =  Integer.parseInt(params.RAM)
-                int cpuSizePerVM      =  Integer.parseInt(params.CPU)
-                int diskSizePerVM     =  Integer.parseInt(params.DiskSize)
-                int nicCount          =  Integer.parseInt(params.NetworkInterfaces)
+                    def subHeaderStyle  ="""
+                        text-align: lef;
+                        padding: 2px;
+                        color: #fffff;
+                        font-size: 16px;
+                        font-weight: normal;
+                        text-transform: uppercase;"""
+                    String vmName         =  params.ServerName.toString()
+                    int vmCount           =  Integer.parseInt(params.ServerCount)
+                    int diskCount         =  Integer.parseInt(params.DiskCount)
+                    int ramSizePerVM      =  Integer.parseInt(params.RAM)
+                    int cpuSizePerVM      =  Integer.parseInt(params.CPU)
+                    int diskSizePerVM     =  Integer.parseInt(params.DiskSize)
+                    int nicCount          =  Integer.parseInt(params.NetworkInterfaces)
 
-                int totalDiskSize     =  diskSizePerVM * vmCount
-                int totalCpu          =  cpuSizePerVM  * vmCount
-                int totalMemory       =  ramSizePerVM  * vmCount
+                    int totalDiskSize     =  diskSizePerVM * vmCount
+                    int totalCpu          =  cpuSizePerVM  * vmCount
+                    int totalMemory       =  ramSizePerVM  * vmCount
                 
                 //echo "totalDiskSize: ${totalDiskSize}, totalCpu:${totalCpu}, totalMemory:${totalMemory} "
                 
