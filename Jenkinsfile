@@ -343,8 +343,7 @@ pipeline{
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
- 
-                                                        return [hostDatastoreMap[index]]
+                                                        return [hostDatastoreMap]
                                                        """.stripIndent()
                                                     ]
                                                 ]
