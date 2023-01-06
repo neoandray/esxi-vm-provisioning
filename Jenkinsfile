@@ -196,8 +196,8 @@ pipeline{
                     font-size: 16px;
                     font-weight: normal;
                     text-transform: uppercase;"""
-                String vmName         =  params.Name.toString()
-                int vmCount           =  Integer.parseInt(params.Count)
+                String vmName         =  params.ServerName.toString()
+                int vmCount           =  Integer.parseInt(params.ServerCount)
                 int diskCount         =  Integer.parseInt(params.DiskCount)
                 int ramSizePerVM      =  Integer.parseInt(params.RAM)
                 int cpuSizePerVM      =  Integer.parseInt(params.CPU)
