@@ -103,7 +103,7 @@ def  hostNetworkMap   = [:]
             ]
         ]
     ]
-    ,choice(name:'MicroMangage',choices: ['YES','NO'], description:"Select 'Yes' to make changes to some additional/advanced VM configurations.")
+    ,choice(name:'MicroManage',choices: ['YES','NO'], description:"Select 'Yes' to make changes to some additional/advanced VM configurations.")
 
     ])
  ])
