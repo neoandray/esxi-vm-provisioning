@@ -304,8 +304,8 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         def index   = "${serverName}_PhysicalHost"
-                                                        def options = "${hostDatastoreMap}"
-                                                        return options[index]
+                                                        def options = "${hostDatastoreMap['172.22.39.38']}"
+                                                        return "${hostDatastoreMap['172.22.39.38']}"
                                                        """.stripIndent()
                                                     ]
                                                 ]
