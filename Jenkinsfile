@@ -244,6 +244,7 @@ pipeline{
                                 vmSpecsMap["mask"]                  = null
                                 vmSpecsMap["gateway"]               = null
                                 vmSpecsMap["dns"]                   = null
+
                                 if (params.Environment              == "production"){ 
                                     vmSpecsMap["template"]          = params.OS.toString().toLowerCase() == "windows"? "CMTeam_Win10x64": "CMTeam_U2004x64_Template"
                                     vmSpecsMap["storageFormat"]     =  "thick"
@@ -252,9 +253,10 @@ pipeline{
                                     vmSpecsMap["storageFormat"]     =   "thin"
                                 }
                                 updatedVMSpecifications = (vmSpecsMap);
+                                
                         }
                             
-                    }else if(params.MicroManage.toLowerCase()=="Yes"){ 
+                    }else if(params.MicroManage.toLowerCase()=="yes"){ 
 
                         println("Preparing Server customization wizard")
                         
