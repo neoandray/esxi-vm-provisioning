@@ -132,7 +132,7 @@ pipeline{
             
             steps{
                 script{
-                    def  vmInformation       = null 
+                    def  vmInformation       =  null 
                     if(params.Environment    in ['Test' ,'Production']){ 
                         vmInformation        =  getVMInfo(params.Environment)
                     }else{
@@ -215,108 +215,83 @@ pipeline{
                     int totalCpu          =  cpuSizePerVM  * vmCount
                     int totalMemory       =  ramSizePerVM  * vmCount
                 
-                //echo "totalDiskSize: ${totalDiskSize}, totalCpu:${totalCpu}, totalMemory:${totalMemory} "
-                
-                /*  vmInformation.each{
-                    echo it.toString()
-                }
-                */
-
-                def updatedVMSpecifications  = [];
-                def vmConfigInputParameters   = []
-                
-                if(params.MicroManage.toLowerCase()=="no"){ 
-                    for( def k=0; k<vmCount; k++){
-                            def natIndex = k+1
-                            def vmSpecsMap = [:];
-                            vmSpecsMap["name"]                  = natIndex.toString().length()==1?"${vmName}00${natIndex}":"${vmName}0${natIndex}"
-                            vmSpecsMap["nmCpu"]                 = params.CPU
-                            vmSpecsMap["memoryGb"]              = params.RAM
-                            vmSpecsMap["networkName"]           = 'VM Network'
-                            vmSpecsMap["hasCD"]                 = true
-                            vmSpecsMap["hasFloppy"]             = false
-                            vmSpecsMap["cluster"]               = ""
-                            vmSpecsMap["osDistribution"]        = params.OS
-                            vmSpecsMap["ipMode"]                = "dhcp"
-                            vmSpecsMap["ip"]                    = null
-                            vmSpecsMap["mask"]                  = null
-                            vmSpecsMap["gateway"]               = null
-                            vmSpecsMap["dns"]                   = null
-                            if (params.Environment              == "production"){ 
-                                vmSpecsMap["template"]          = params.OS.toString().toLowerCase() == "windows"? "CMTeam_Win10x64": "CMTeam_U2004x64_Template"
-                                vmSpecsMap["storageFormat"]     =  "thick"
-                            }else if (params.Environment        == "test"){ 
-                                vmSpecsMap["template"]          =   params.OS.toString().toLowerCase() == "windows"? "CMTeam_Win10x64": "CMTeam_U2004x64_Template"
-                                vmSpecsMap["storageFormat"]     =   "thin"
-                            }
-                            updatedVMSpecifications = (vmSpecsMap);
+                    //echo "totalDiskSize: ${totalDiskSize}, totalCpu:${totalCpu}, totalMemory:${totalMemory} "
+                    
+                    /*  vmInformation.each{
+                        echo it.toString()
                     }
-                        
-                }else if(params.MicroManage.toLowerCase()=="Yes"){ 
+                    */
 
-                    println("Preparing Server customization wizard")
-                    
-                  //  def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
-                    
-                  //  vmHostMap = readJSON (text :vmHostMap)
-                   
-                    for( def k=0; k<vmCount; k++){
-                        def indexNatural = k+1
-                        def vmIndex      = indexNatural
-                        def vmSpecsMap   = [:]
-                        def vmID         = "Server${indexNatural}"
-                        def serverName   = indexNatural <9 ?"${vmName}00${indexNatural}":"${vmName}0${indexNatural}"
-                        //def vmHostName = vmHostMap[vmID]
+                    def updatedVMSpecifications  = [];
+                    def vmConfigInputParameters   = []
 
-                    // echo "${vmHostName} has been chosen as the host of  ${serverName}"
+                    print("The value of MicroManage is ${params.MicroManage} ")
                     
-                        vmConfigInputParameters.addAll(
-                            [
-                                separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
-                                ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
-                                ,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
-                                ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
-                                ,choice(name:"${serverName}_VmTemplate", choices:vmTemplates , description: "Specify VM Template that would be used to create ${serverName}")
-                            ]
-                        )
-
-                        for (def i = 0; i<diskCount; i++){
-                            def index =  i+1
-                            vmConfigInputParameters.addAll(
-                            [   
-                                separator(name: "${serverName}_Disk${i}_separator", sectionHeader: "${serverName}_Disk${index} Details",sectionHeaderStyle: subHeaderStyle),
-                                ,choice(name:"${serverName}_Disk${index}_Size",choices: [100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500],description: 'The size of each hard drive in GB to be added to the server')	
-                                ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Datastore for the hard disk ${index} of ${serverName} ",filterLength: 1, filterable: true,
-                                    name: "${serverName}_Disk${index}_Location"
-                                    ,referencedParameters: "${serverName}_PhysicalHost"
-                                    ,script: [$class: 'GroovyScript',  
-                                                fallbackScript: [
-                                                classpath: [],  sandbox: true, 
-                                                script: """
-                                                return ["Fallback"]
-                                                """.stripIndent()
-                                                ] ,
-                                                script:[
-                                                    classpath: [],   sandbox: true, 
-                                                    script: """
-                                                    return ["${params.each{it.key}}"]   
-                                                    """.stripIndent()
-                                                ]
-                                            ]
-                                ]
-                            
-                            ]
-                            )
+                    if(params.MicroManage.toLowerCase()=="no"){ 
+                        for( def k=0; k<vmCount; k++){
+                                def natIndex = k+1
+                                def vmSpecsMap = [:];
+                                vmSpecsMap["name"]                  = natIndex.toString().length()==1?"${vmName}00${natIndex}":"${vmName}0${natIndex}"
+                                vmSpecsMap["nmCpu"]                 = params.CPU
+                                vmSpecsMap["memoryGb"]              = params.RAM
+                                vmSpecsMap["networkName"]           = 'VM Network'
+                                vmSpecsMap["hasCD"]                 = true
+                                vmSpecsMap["hasFloppy"]             = false
+                                vmSpecsMap["cluster"]               = ""
+                                vmSpecsMap["osDistribution"]        = params.OS
+                                vmSpecsMap["ipMode"]                = "dhcp"
+                                vmSpecsMap["ip"]                    = null
+                                vmSpecsMap["mask"]                  = null
+                                vmSpecsMap["gateway"]               = null
+                                vmSpecsMap["dns"]                   = null
+                                if (params.Environment              == "production"){ 
+                                    vmSpecsMap["template"]          = params.OS.toString().toLowerCase() == "windows"? "CMTeam_Win10x64": "CMTeam_U2004x64_Template"
+                                    vmSpecsMap["storageFormat"]     =  "thick"
+                                }else if (params.Environment        == "test"){ 
+                                    vmSpecsMap["template"]          =   params.OS.toString().toLowerCase() == "windows"? "CMTeam_Win10x64": "CMTeam_U2004x64_Template"
+                                    vmSpecsMap["storageFormat"]     =   "thin"
+                                }
+                                updatedVMSpecifications = (vmSpecsMap);
                         }
+                            
+                    }else if(params.MicroManage.toLowerCase()=="Yes"){ 
 
-                        for (def i = 0; i<nicCount; i++){
+                        println("Preparing Server customization wizard")
+                        
+                    //  def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
+                        
+                    //  vmHostMap = readJSON (text :vmHostMap)
+                    
+                        for( def k=0; k<vmCount; k++){
+                            def indexNatural = k+1
+                            def vmIndex      = indexNatural
+                            def vmSpecsMap   = [:]
+                            def vmID         = "Server${indexNatural}"
+                            def serverName   = indexNatural <9 ?"${vmName}00${indexNatural}":"${vmName}0${indexNatural}"
+                            //def vmHostName = vmHostMap[vmID]
+
+                        // echo "${vmHostName} has been chosen as the host of  ${serverName}"
+                        
+                            vmConfigInputParameters.addAll(
+                                [
+                                    separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
+                                    ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
+                                    ,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
+                                    ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
+                                    ,choice(name:"${serverName}_VmTemplate", choices:vmTemplates , description: "Specify VM Template that would be used to create ${serverName}")
+                                ]
+                            )
+
+                            for (def i = 0; i<diskCount; i++){
                                 def index =  i+1
                                 vmConfigInputParameters.addAll(
                                 [   
-                                    separator(name: "${serverName}_NIC${i}_separator", sectionHeader: "${serverName}_NIC${index} Details",sectionHeaderStyle: subHeaderStyle),
-                                    ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
-                                        name: "${serverName}_NIC${index}",   referencedParameters: "${serverName}_PhysicalHost",
-                                        script: [$class: 'GroovyScript',  
+                                    separator(name: "${serverName}_Disk${i}_separator", sectionHeader: "${serverName}_Disk${index} Details",sectionHeaderStyle: subHeaderStyle),
+                                    ,choice(name:"${serverName}_Disk${index}_Size",choices: [100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500],description: 'The size of each hard drive in GB to be added to the server')	
+                                    ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Datastore for the hard disk ${index} of ${serverName} ",filterLength: 1, filterable: true,
+                                        name: "${serverName}_Disk${index}_Location"
+                                        ,referencedParameters: "${serverName}_PhysicalHost"
+                                        ,script: [$class: 'GroovyScript',  
                                                     fallbackScript: [
                                                     classpath: [],  sandbox: true, 
                                                     script: """
@@ -326,9 +301,7 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                            def host       = "${serverName}_PhysicalHost"
-                                                                                
-                                                                return [parameter]
+                                                        return ["${params.each{it.key}}"]   
                                                         """.stripIndent()
                                                     ]
                                                 ]
@@ -336,14 +309,43 @@ pipeline{
                                 
                                 ]
                                 )
+                            }
 
-                        }
+                            for (def i = 0; i<nicCount; i++){
+                                    def index =  i+1
+                                    vmConfigInputParameters.addAll(
+                                    [   
+                                        separator(name: "${serverName}_NIC${i}_separator", sectionHeader: "${serverName}_NIC${index} Details",sectionHeaderStyle: subHeaderStyle),
+                                        ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
+                                            name: "${serverName}_NIC${index}",   referencedParameters: "${serverName}_PhysicalHost",
+                                            script: [$class: 'GroovyScript',  
+                                                        fallbackScript: [
+                                                        classpath: [],  sandbox: true, 
+                                                        script: """
+                                                        return ["Fallback"]
+                                                        """.stripIndent()
+                                                        ] ,
+                                                        script:[
+                                                            classpath: [],   sandbox: true, 
+                                                            script: """
+                                                                def host       = "${serverName}_PhysicalHost"
+                                                                                    
+                                                                    return [parameter]
+                                                            """.stripIndent()
+                                                        ]
+                                                    ]
+                                        ]
+                                    
+                                    ]
+                                    )
 
-    
-                    } 
-                 def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
-            
-                }
+                            }
+
+        
+                        } 
+                    def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
+                
+                    }
 
                     //to be set during deployment
                     //    vmSpecsMap["vmHost"]                = ""
