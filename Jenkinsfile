@@ -24,7 +24,7 @@ pipeline{
      choice(name:'RAM',choices: [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64], description:'The size of the RAM (physical memory) in GB of each server to be created')	
 	 choice(name:'NetworkInterfaces',choices: [1,2,3,4], description:'The number of NICs (Network Interface cards to be created) for each server')	
 	 choice(name:'Environment',choices: ['Test' ,'Production','Others'],description:'The VCenter server that manages the hosts where the server(s) will be created')
-,[$class: 'DynamicReferenceParameter', 
+     [$class: 'DynamicReferenceParameter', 
         choiceType: 'ET_FORMATTED_HTML',
 		omitValueField: true,
         description:'The VCenter server that manages the hosts where the server(s) will be created',
@@ -53,7 +53,7 @@ pipeline{
             ]
         ]
     ]
-		   ,[$class: 'DynamicReferenceParameter', 
+		   [$class: 'DynamicReferenceParameter', 
         choiceType: 'ET_FORMATTED_HTML',
 		omitValueField: true,
         description:'The username for connecting to the VCenter Server',
@@ -82,7 +82,7 @@ pipeline{
             ]
         ]
     ]
-	   ,[$class: 'DynamicReferenceParameter', 
+	   [$class: 'DynamicReferenceParameter', 
         choiceType: 'ET_FORMATTED_HTML',
 		omitValueField: true,
         description:'The password for connecting to the VCenter server',
