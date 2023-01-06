@@ -253,6 +253,8 @@ pipeline{
                     }
                         
                 }else if(params.MicroManage.toLowerCase()=="Yes"){ 
+
+                    println("Preparing Server customization wizard")
                     
                   //  def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
                     
