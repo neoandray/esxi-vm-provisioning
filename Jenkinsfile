@@ -304,7 +304,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         def index = ${serverName}_PhysicalHost
-                                                        return ${hostDatastoreMap[index]}
+                                                        return ${hostDatastoreMap[$index]}
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -334,7 +334,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         def index = ${serverName}_PhysicalHost
-                                                        return ${hostNetworkMap[index]}
+                                                        return ${hostNetworkMap[$index]}
                                                        """.stripIndent()
                                                         ]
                                                     ]
@@ -347,7 +347,7 @@ pipeline{
 
         
                         } 
-                    def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
+                      def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
                 
                     }
 
