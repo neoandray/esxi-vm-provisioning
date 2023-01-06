@@ -306,9 +306,10 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        def index   = "${serverName}_PhysicalHost"
+                                                        def index        = "${serverName}_PhysicalHost"
+                                                        def datastoreMaps = "${hostDatastoreMap}"
                                                        
-                                                        return [index]
+                                                        return [datastoreMaps]
                                                        """.stripIndent()
                                                     ]
                                                 ]
