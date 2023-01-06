@@ -303,7 +303,7 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: /
-                                                        return ${hostDatastoreMap[${serverName}_PhysicalHost]}
+                                                        return ${hostDatastoreMap[${serverName}+'_PhysicalHost']}
                                                        /.stripIndent()
                                                     ]
                                                 ]
@@ -332,7 +332,7 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: /
-                                                        return ${hostNetworkMap[${serverName}_PhysicalHost]}
+                                                        return ${hostNetworkMap[${serverName}+'_PhysicalHost']}
                                                        /.stripIndent()
                                                         ]
                                                     ]
