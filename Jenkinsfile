@@ -307,42 +307,8 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         def index         = ${serverName}_PhysicalHost
-                                                        def originalString = "${hostDatastoreMap}"                                                   
-                                                        optionString = originalString.substring(1,originalString.length() -1)
-
-                                                        def hosts = []
-                                                        def datastores  =[]
-                                                        def hostString  = null;
-                                                        def datastoreString = "";
-                                                        def hostStoreMap =[:]
-
-                                                        def indexOfColon      = optionString.indexOf(':') ;
-                                                        def indexOfLastComma  = 0
-
-                                                        while(indexOfColon> 0){
-
-                                                        println(indexOfLastComma)
-                                                        println(indexOfColon)
-                                                        hostString =  optionString.substring(indexOfLastComma,indexOfColon)
-                                                        if(hostString){
-                                                            hosts.push(hostString.trim())
-                                                        }
-                                                        optionString = optionString.substring(indexOfColon+1)
-                                                        indexOfLastComma =optionString.indexOf(']') ;
-                                                        if(indexOfLastComma > 0){
-                                                        datastoreString= optionString.substring(1,indexOfLastComma)
-                                                        if(datastoreString){
-                                                        datastores.push(datastoreString) 
-                                                        }
-                                                        
-                                                        hostStoreMap[hostString] =datastoreString
-                                                        }
-                                                        
-                                                        indexOfLastComma+=2
-                                                        indexOfColon = optionString.indexOf(':') ;
-
-                                                        }
-                                                        return [originalString]
+                                                        def datastorMap = ${hostDatastoreMap}                                                 
+                                                        return datastorMap[index]
                                                        """.stripIndent()
                                                     ]
                                                 ]
