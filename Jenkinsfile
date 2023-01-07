@@ -307,8 +307,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         def index         = ${serverName}_PhysicalHost
-                                                        def datastoreMaps = "${hostDatastoreMap}"                                                   
-                                                        def originalString = datastoreMaps
+                                                        def originalString = "${hostDatastoreMap}"                                                   
                                                         optionString = originalString.substring(1,originalString.length() -1)
 
                                                         def hosts = []
@@ -343,7 +342,7 @@ pipeline{
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
-                                                        return hostStoreMap[index]
+                                                        return [originalString]
                                                        """.stripIndent()
                                                     ]
                                                 ]
