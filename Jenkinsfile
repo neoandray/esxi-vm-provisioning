@@ -315,7 +315,7 @@ pipeline{
                                                         def datastores  =[]
                                                         def hostString  = null;
                                                         def datastoreString = "";
-                                                        def hostDatastoreMap =[:]
+                                                        def hostStoreMap =[:]
 
                                                         def indexOfColon      = optionString.indexOf(':') ;
                                                         def indexOfLastComma  = 0
@@ -336,14 +336,14 @@ pipeline{
                                                         datastores.push(datastoreString) 
                                                         }
                                                         
-                                                        hostDatastoreMap[hostString] =datastoreString
+                                                        hostStoreMap[hostString] =datastoreString
                                                         }
                                                         
                                                         indexOfLastComma+=2
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
-                                                        return [hostDatastoreMap]
+                                                        return hostStoreMap[index]
                                                        """.stripIndent()
                                                     ]
                                                 ]
