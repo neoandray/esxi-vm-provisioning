@@ -306,9 +306,8 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        def index         = ${serverName}_PhysicalHost
-                                                        def datastorMap = ${hostDatastoreMap}                                                 
-                                                        return ${serverName}_PhysicalHost
+                                                          
+                                                        return "${serverName}_PhysicalHost"
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -337,8 +336,7 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                         def index   = ${serverName}_PhysicalHost
-                                                        def options = ${hostNetworkMap}
+
                                                         return  ["${serverName}_PhysicalHost"]
                                                        """.stripIndent()
                                                         ]
