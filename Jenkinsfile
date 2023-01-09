@@ -309,7 +309,7 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        selectedHost   = "${serverName+_PhysicalHost}"
+                                                        selectedHost   = "${serverName}+_PhysicalHost"
                                                         originalString = "${hostDatastoreMap}"
                                                         optionString = originalString.substring(1,originalString.length() -1)
 
