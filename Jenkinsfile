@@ -5,7 +5,7 @@ def  vmTemplates      = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
 
-def getListOfOptions(def optionMap, def index){
+def getListOfOptions(def optionsMap, def index){
     return optionsMap[index]
 }
 
