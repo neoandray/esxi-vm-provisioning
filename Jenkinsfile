@@ -232,7 +232,9 @@ pipeline{
                     print("The value of MicroManage is ${params.MicroManage} ")
                     
                     if(params.MicroManage.toLowerCase()=="no"){ 
+
                         for( def k=0; k<vmCount; k++){
+
                                 def natIndex = k+1
                                 def vmSpecsMap = [:];
                                 vmSpecsMap["name"]                  = natIndex.toString().length()==1?"${vmName}00${natIndex}":"${vmName}0${natIndex}"
@@ -338,8 +340,9 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
+                                                        selectedHost = ${serverName+"_PhysicalHost"}
                                                          hostNetworkMap = ${hostNetworkMap}
-                                                        return  [hostNetworkMap]
+                                                        return  [hostNetworkMap[selectedHost]]
                                                        """.stripIndent()
                                                         ]
                                                     ]
