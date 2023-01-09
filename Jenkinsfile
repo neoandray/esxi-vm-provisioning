@@ -1,9 +1,9 @@
 
 @Library('esxi-provisioning-libraries') _
-def  physicalHosts    = []
-def  vmTemplates      = []
-def  hostDatastoreMap = [:]
-def  hostNetworkMap   = [:]
+physicalHosts    = []
+vmTemplates      = []
+hostDatastoreMap = [:]
+hostNetworkMap   = [:]
 
 def getListOfOptions(def deviceType, def index){
     def  optionsMap = null;
