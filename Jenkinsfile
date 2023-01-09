@@ -339,7 +339,7 @@ pipeline{
                                                         script: """
                                                          def index   = ${serverName}_PhysicalHost
                                                         def options = ${hostNetworkMap}
-                                                        return  [index]
+                                                        return  [${serverName}_PhysicalHost]
                                                        """.stripIndent()
                                                         ]
                                                     ]
