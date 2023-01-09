@@ -308,7 +308,7 @@ pipeline{
                                                         script: """
                                                         def index         = ${serverName}_PhysicalHost
                                                         def datastorMap = ${hostDatastoreMap}                                                 
-                                                        return datastorMap[index]
+                                                        return ${serverName}_PhysicalHost
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -339,7 +339,7 @@ pipeline{
                                                         script: """
                                                          def index   = ${serverName}_PhysicalHost
                                                         def options = ${hostNetworkMap}
-                                                        return  [${serverName}_PhysicalHost]
+                                                        return  ["${serverName}_PhysicalHost"]
                                                        """.stripIndent()
                                                         ]
                                                     ]
