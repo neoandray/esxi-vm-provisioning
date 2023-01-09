@@ -338,7 +338,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [${hostNetworkMap[serverName+"_PhysicalHost"]}]
+                                                        return  [${hostNetworkMap[params[serverName+"_PhysicalHost"]]}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
