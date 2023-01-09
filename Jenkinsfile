@@ -4,6 +4,7 @@ physicalHosts    = []
 vmTemplates      = []
 hostDatastoreMap = [:]
 hostNetworkMap   = [:]
+pipeline         = this;
 
 
  properties([
@@ -307,7 +308,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                           
-                                                        return [${getListOfOptions("drives", "${serverName}_PhysicalHost")}]
+                                                        return [${getListOfOptions(pipeline, "drives", "${serverName}_PhysicalHost")}]
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -337,7 +338,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [${getListOfOptions("nics", "${serverName}_PhysicalHost")}]
+                                                        return  [${getListOfOptions(pipeline, "nics", "${serverName}_PhysicalHost")}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
