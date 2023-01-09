@@ -5,7 +5,13 @@ def  vmTemplates      = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
 
-def getListOfOptions(def optionsMap, def index){
+def getListOfOptions(def deviceType, def index){
+    def  optionsMap = null;
+    if (deviceType=="drives"){
+       optionsMap = hostDatastoreMap;
+    }else if(deviceType=="nics"){
+       optionsMap = hostNetworkMap;
+    }
     return optionsMap[index]
 }
 
@@ -311,7 +317,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                           
-                                                        return ${getListOfOptions(hostDatastoreMap, "${serverName}_PhysicalHost")}
+                                                        return [getListOfOptions("drives", ${serverName}_PhysicalHost)]
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -341,7 +347,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [getListOfOptions(hostNetworkMap, ${serverName}_PhysicalHost)}]
+                                                        return  [${getListOfOptions("nics", "${serverName}_PhysicalHost")}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
