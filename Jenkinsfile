@@ -343,7 +343,7 @@ pipeline{
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
-                                                        return [originalString]
+                                                        return [hostStoreMap[selectedHost]]
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -406,7 +406,7 @@ pipeline{
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
-                                                        return [originalString]
+                                                        return [hostStoreMap[selectedHost]]
 
                                                        """.stripIndent()
                                                         ]
