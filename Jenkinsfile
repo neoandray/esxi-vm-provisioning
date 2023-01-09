@@ -351,6 +351,7 @@ pipeline{
 
         
                         } 
+                        pipeline         = this;
                       def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Additional Provisioning Information', parameters: vmConfigInputParameters, ok:'Provision')
                 
                     }
