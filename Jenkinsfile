@@ -8,13 +8,12 @@ hostNetworkMap   = [:]
 def getListOfOptions(def deviceType, def index){
     def  optionsMap = null;
     if (deviceType=="drives"){
-       optionsMap = this.hostDatastoreMap;
+       optionsMap = hostDatastoreMap;
     }else if(deviceType=="nics"){
-       optionsMap = this.hostNetworkMap;
+       optionsMap = hostNetworkMap;
     }
     return optionsMap[index]
 }
-
 
  properties([
     parameters([
