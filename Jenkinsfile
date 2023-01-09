@@ -5,14 +5,14 @@ vmTemplates      = []
 hostDatastoreMap = [:]
 hostNetworkMap   = [:]
 
-getListOfOptions(def deviceType, def index){
+getListOfOptions(def deviceType, def devIndex){
     def  optionsMap = null;
     if (deviceType=="drives"){
        optionsMap = hostDatastoreMap;
     }else if(deviceType=="nics"){
        optionsMap = hostNetworkMap;
     }
-    return optionsMap[index]
+    return optionsMap[devIndex]
 }
 
  properties([
