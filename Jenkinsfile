@@ -311,7 +311,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                           
-                                                        return getListOfOptions(${hostDatastoreMap}, ${serverName}_PhysicalHost)
+                                                        return ${getListOfOptions(hostDatastoreMap, "${serverName}_PhysicalHost")}
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -341,7 +341,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [getListOfOptions(${hostNetworkMap}, ${serverName}_PhysicalHost)]
+                                                        return  [${getListOfOptions(hostNetworkMap, "${serverName}_PhysicalHost")}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
@@ -354,7 +354,7 @@ pipeline{
 
         
                         } 
-                      def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Provide Additional Information', parameters: vmConfigInputParameters, ok:'Provision')
+                      def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Additional Provisioning Information', parameters: vmConfigInputParameters, ok:'Provision')
                 
                     }
 
