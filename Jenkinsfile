@@ -307,8 +307,8 @@ pipeline{
                                                     script:[
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                          
-                                                        return [${getListOfOptions(pipeline, "drives", "${serverName}_PhysicalHost")}]
+                                                           selectedHost = ${serverName+"_PhysicalHost"}
+                                                        return [selectedHost]
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -337,7 +337,8 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        return  [${hostNetworkMap[serverName+"_PhysicalHost"]}]
+                                                         selectedHost = ${serverName+"_PhysicalHost"}
+                                                        return  [${hostNetworkMap}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
