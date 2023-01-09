@@ -338,7 +338,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [${params.serverName+"_PhysicalHost"}]
+                                                        return  [${params[serverName+"_PhysicalHost"]}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
