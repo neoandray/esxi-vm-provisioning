@@ -5,7 +5,7 @@ vmTemplates      = []
 hostDatastoreMap = [:]
 hostNetworkMap   = [:]
 
-def getListOfOptions(def deviceType, def index){
+getListOfOptions(def deviceType, def index){
     def  optionsMap = null;
     if (deviceType=="drives"){
        optionsMap = hostDatastoreMap;
