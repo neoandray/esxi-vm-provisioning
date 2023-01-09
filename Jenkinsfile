@@ -5,6 +5,10 @@ def  vmTemplates      = []
 def  hostDatastoreMap = [:]
 def  hostNetworkMap   = [:]
 
+def getListOfOptions(def optionMap, def index){
+    return optionsMap[index]
+}
+
 
  properties([
     parameters([
@@ -307,7 +311,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                           
-                                                        return [${hostDatastoreMap}[${serverName}_PhysicalHost]]
+                                                        return getListOfOptions(${hostDatastoreMap}, ${serverName}_PhysicalHost)
                                                        """.stripIndent()
                                                     ]
                                                 ]
@@ -337,7 +341,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [${serverName}_PhysicalHost]
+                                                        return  [getListOfOptions(${hostNetworkMap}, ${serverName}_PhysicalHost)]
                                                        """.stripIndent()
                                                         ]
                                                     ]
@@ -350,7 +354,7 @@ pipeline{
 
         
                         } 
-                      def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Click this link to provide additional information', parameters: vmConfigInputParameters, ok:'Provision')
+                      def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Provide Additional Information', parameters: vmConfigInputParameters, ok:'Provision')
                 
                     }
 
