@@ -307,7 +307,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                           
-                                                        return [${getListOfOptions("drives", ${serverName}_PhysicalHost)}]
+                                                        return [${getListOfOptions("drives", "${serverName}_PhysicalHost)"}]
                                                        """.stripIndent()
                                                     ]
                                                 ]
