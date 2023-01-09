@@ -338,7 +338,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
 
-                                                        return  [${getListOfOptions(pipeline, "nics", "${serverName}_PhysicalHost")}]
+                                                        return  [${hostNetworkMap[serverName+"_PhysicalHost"]}]
                                                        """.stripIndent()
                                                         ]
                                                     ]
@@ -351,7 +351,7 @@ pipeline{
 
         
                         } 
-                        pipeline         = this;
+                        
                       def vmSpecsModificationInput = input(id: 'vmSpecsModificationInput', message:'Additional Provisioning Information', parameters: vmConfigInputParameters, ok:'Provision')
                 
                     }
