@@ -360,17 +360,8 @@ pipeline{
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
                                                         datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Datastores","")
                                                         datastoreList    = []
-                                                        index =0
-                                                        while(index >-1){
-                                                          nextIndex = datastores.indexOf(';',index)
-                                                          if(nextIndex >-1 ){
-                                                            datastoreList.add(datastores.substring(index+1,nextIndex  ))
-                                                          }else{
-                                                            datastoreList.add(datastores.substring(index+1  ))
-                                                          }
-                                                          index =  nextIndex
                                                         }
-                                                        return [datastoreList]
+                                                        return [datastores]
 
                                                        """.stripIndent()
                                                         ]
