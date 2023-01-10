@@ -334,8 +334,6 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         selectedHost   = ${serverName+"_Host_And_Datastore"}
-                                                        originalString = ${hostNetworkMap}
-                                                        
                                                         return [selectedHost]
 
                                                        """.stripIndent()
