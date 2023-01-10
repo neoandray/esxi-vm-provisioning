@@ -357,8 +357,8 @@ pipeline{
                                                         script: """
                                                         selectedHost   = ${serverName+"_PhysicalHost"}
                                                         datastores     = selectedHost.split('|')[1].replace("Datastores:","")
-                                                        datastoreList  = datastores.split(";").each{it.trim()}
-                                                        return [datastoreList]
+                                                        datastoreList  = datastores.split(";")
+                                                        return datastoreList
 
                                                        """.stripIndent()
                                                         ]
@@ -389,7 +389,7 @@ pipeline{
                                                         script: """
                                                         selectedHost   = ${serverName+"_PhysicalHost"}
                                                         networks       = selectedHost.split('|')[2].replace("Networks:","")
-                                                        NetworkList    = networks.split(";").each{it.trim()}
+                                                        NetworkList    = networks.split(";")
                                                         return [NetworkList]
                                                        """.stripIndent()
                                                         ]
