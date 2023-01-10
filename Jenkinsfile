@@ -355,12 +355,22 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        selectedHost   = ${serverName+"_PhysicalHost"}
+                                                        selectedHost     = ${serverName+"_PhysicalHost"}
                                                         def firstIndex   = selectedHost.indexOf('|')+1
-                                                        def secondIndex   = selectedHost.indexOf('|',firstIndex)
-                                                        datastores     = selectedHost.substring(firstIndex,secondIndex)
-                                                        datastoreList  = datastores.split(";")
-                                                        return [datastores]
+                                                        def secondIndex  = selectedHost.indexOf('|',firstIndex)
+                                                        datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Datastores","")
+                                                        datastoreList    = []
+                                                        index =0
+                                                        while(index >0){
+                                                          nextIndex = datastores.indexOf(';',index)
+                                                          if(nextIndex >-1 ){
+                                                            datastoreList.add(datastores.substring(index+1,nextIndex  ))
+                                                          }else{
+                                                            datastoreList.add(datastores.substring(index+1  ))
+                                                          }
+                                                          index =  nextIndex
+                                                        }
+                                                        return [datastoreList]
 
                                                        """.stripIndent()
                                                         ]
@@ -392,7 +402,7 @@ pipeline{
                                                         selectedHost     = ${serverName+"_PhysicalHost"}
                                                         def firstIndex   = selectedHost.indexOf('|')+1
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
-                                                        networks         = selectedHost.substring(secondIndex+1)
+                                                        networks         = selectedHost.substring(secondIndex+1).replace("Networks","")
                                                         networkList      = networks.split(";")
                                                         return [networks]
                                                        """.stripIndent()
