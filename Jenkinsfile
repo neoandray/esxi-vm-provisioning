@@ -360,7 +360,17 @@ pipeline{
                                                         def secondIndex      = selectedHost.indexOf('|',firstIndex)
                                                         def datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Networks:","")
                                                         def datastoreList    = []
-                                                        return [datastores]
+                                                        index =0
+                                                        while(index >-1){
+                                                          nextIndex = datastores.indexOf(';',index)
+                                                                if(nextIndex > -1 ){
+                                                                    datastoreList.add(datastores.substring(index+1,nextIndex  ))
+                                                                }else{
+                                                                    datastoreList.add(datastores.substring(index+1 ))
+                                                                }
+                                                          index  =nextIndex
+                                                          }
+                                                        return [datastoreList]
 
                                                        """.stripIndent()
                                                         ]
@@ -392,9 +402,9 @@ pipeline{
                                                         selectedHost     = ${serverName+"_PhysicalHost"}
                                                         def firstIndex   = selectedHost.indexOf('|')+1
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
-                                                        def networks         = selectedHost.substring(secondIndex+1).replace("Networks:","")
-                                                        def networkList      = networks.split(';')
-                                                        return [networkList]
+                                                        def networks     = selectedHost.substring(secondIndex+1).replace("Networks:","")
+                                                       // def networkList  = networks.split(';')
+                                                        return [networks.split(';')]
                                                        """.stripIndent()
                                                         ]
                                                     ]
