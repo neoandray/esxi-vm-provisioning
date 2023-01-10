@@ -312,7 +312,7 @@ pipeline{
 							networkList.add("NetworkName: ${it.NetworkName}")
 						}
 						
-						hostConfigs.Add(host+" | Datastores:"+storageList.join(";")+" | networks:"+networkList.join(";"))
+						hostConfigs.add(host+" | Datastores:"+storageList.join(";")+" | networks:"+networkList.join(";"))
 					}
                      vmConfigInputParameters.add(separator(name: 'VMCreationHeader', sectionHeader: "Page 2  - Virtual Machine Creation Wizard",separatorStyle: "border-width: 0", sectionHeaderStyle: vmCreationHeaderStyle))
                         for( def k=0; k<vmCount; k++){
