@@ -4,7 +4,7 @@ physicalHosts    = []
 vmTemplates      = []
 hostDatastoreMap = [:]
 hostNetworkMap   = [:]
-datastoreSizeMap = [:]
+datastoreSpaceMap = [:]
 pipeline         = this;
 
 
@@ -148,13 +148,14 @@ pipeline{
                     }
                     def previousHost = null
                     def datastoreArray = []
+                    /*
                     vmInformation['hostDatastoreMap'].each{
 
                         if(!previousHost||(previousHost==it.HostName)){
 
                             datastoreArray.push( it.DataStoreName)
-                            if(!datastoreSizeMap.keys().contains(it.DataStoreName) ){
-                                datastoreSizeMap[it.DataStoreName] = null
+                            if(!datastoreSpaceMap.keySet().contains(it.DataStoreName) ){
+                                datastoreSpaceMap[it.DataStoreName] = it.FreeSpaceGB
                             }
 
                         }else{
@@ -166,9 +167,16 @@ pipeline{
                         }   
                         previousHost=it.HostName            
                     }
+                      
+                   // print(hostDatastoreMap)
 
-                    print(hostDatastoreMap)
+                   */
 
+                    def datastoreOptions = []
+                    vmInformation['hostDatastoreMap'].each{
+                    datastoreOptions.add("${it.DataStoreName} | FreeSpace: ${it.FreeSpace} | EsxiHost: ${it.HostName}");
+                    }
+       
                     
                     vmInformation['templates'].each{
 
@@ -190,7 +198,7 @@ pipeline{
                         previousHost=it.HostName            
                     }
 
-                    print(hostNetworkMap)
+                  //  print(hostNetworkMap)
 
                     def vmSeparatorHeaderStyle = """
                         background-color: #3c54cf;
@@ -289,7 +297,8 @@ pipeline{
                                 [
                                     separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
                                     ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
-                                    ,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
+                                    //,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
+                                    ,choice(name:"${serverName}_Host_Datastore", choices: datastoreOptions, description: "Specify the storage and host for ${serverName}")
                                     ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
                                     ,choice(name:"${serverName}_VmTemplate", choices:vmTemplates , description: "Specify VM Template that would be used to create ${serverName}")
                                 ]
@@ -301,59 +310,6 @@ pipeline{
                                 [   
                                     separator(name: "${serverName}_Disk${i}_separator", sectionHeader: "${serverName}_Disk${index} Details",sectionHeaderStyle: subHeaderStyle),
                                     ,choice(name:"${serverName}_Disk${index}_Size",choices: [100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500],description: 'The size of each hard drive in GB to be added to the server')	
-                                    ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Datastore for the hard disk ${index} of ${serverName} ",filterLength: 1, filterable: true,
-                                        name: "${serverName}_Disk${index}_Location"
-                                        ,referencedParameters: "${serverName}_PhysicalHost"
-                                        ,script: [$class: 'GroovyScript',  
-                                                    fallbackScript: [
-                                                    classpath: [],  sandbox: true, 
-                                                    script: """
-                                                    return ["Fallback"]
-                                                    """.stripIndent()
-                                                    ] ,
-                                                    script:[
-                                                        classpath: [],   sandbox: true, 
-                                                        script: """
-                                                        selectedHost   = "${serverName}+_PhysicalHost"
-                                                        originalString = ${hostDatastoreMap}
-                                                        optionString = originalString.substring(1,originalString.length() -1)
-
-                                                         hosts = []
-                                                         datastores  =[]
-                                                         hostString  = null;
-                                                         datastoreString = "";
-                                                         hostStoreMap =[:]
-
-                                                         indexOfColon      = optionString.indexOf(':') ;
-                                                         indexOfLastComma  = 0
-
-                                                        while(indexOfColon> 0){
-
-                                                        hostString =  optionString.substring(indexOfLastComma,indexOfColon)
-                                                        if(hostString){
-                                                            hosts.push(hostString.trim())
-                                                        }
-                                                        optionString = optionString.substring(indexOfColon+1)
-                                                        indexOfLastComma =optionString.indexOf(']') ;
-                                                        if(indexOfLastComma > 0){
-                                                        datastoreString= optionString.substring(1,indexOfLastComma)
-                                                        if(datastoreString){
-                                                        datastores.push(datastoreString) 
-                                                        }
-                                                        
-                                                        hostStoreMap[hostString] =datastoreString
-                                                        }
-                                                        
-                                                        indexOfLastComma+=2
-                                                        indexOfColon = optionString.indexOf(':') ;
-
-                                                        }
-                                                        return [selectedHost]
-                                                       """.stripIndent()
-                                                    ]
-                                                ]
-                                    ]
-                                
                                 ]
                                 )
                             }
@@ -362,10 +318,10 @@ pipeline{
                                     def index =  i+1
                                     vmConfigInputParameters.addAll(
                                     [   
-                                        separator(name: "${serverName}_NIC${i}_separator", sectionHeader: "${serverName}_NIC${index} Details",sectionHeaderStyle: subHeaderStyle),
+                                         separator(name: "${serverName}_NIC${i}_separator", sectionHeader: "${serverName}_NIC${index} Details",sectionHeaderStyle: subHeaderStyle),
                                         ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
                                             name: "${serverName}_NIC${index}"
-                                            ,   referencedParameters: "${serverName}_PhysicalHost",
+                                            , referencedParameters: "${serverName}_Host_Datastore",
                                             script: [$class: 'GroovyScript',  
                                                         fallbackScript: [
                                                         classpath: [],  sandbox: true, 
@@ -377,7 +333,7 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        selectedHost   = ${serverName+"_PhysicalHost"}
+                                                        selectedHost   = ${serverName+"_Host_Datastore"}
                                                         originalString = ${hostNetworkMap}
                                                         optionString = originalString.substring(1,originalString.length() -1)
 
@@ -411,7 +367,7 @@ pipeline{
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
-                                                        return [selectedHost]
+                                                        return [originalString]
 
                                                        """.stripIndent()
                                                         ]
