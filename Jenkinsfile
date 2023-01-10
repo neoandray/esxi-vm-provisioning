@@ -363,7 +363,7 @@ pipeline{
                                                         def firstIndex       = selectedHost.indexOf('|')+1
                                                         def secondIndex      = selectedHost.indexOf('|',firstIndex)
                                                         def datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Networks:","")
-                                                        return [pipeline.getComponents(datastores,";")]
+                                                        return [getComponents(datastores,";")]
 
                                                        """.stripIndent()
                                                         ]
