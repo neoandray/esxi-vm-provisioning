@@ -7,6 +7,10 @@ hostNetworkMap   = [:]
 datastoreSpaceMap = [:]
 pipeline         = this;
 selectedHost     = "";
+def getComponents (String rawString, String delimiter){
+    def itemList = rawString.split(delimiter).each{it.trim()}
+    return itemList
+}
 
 vmCreationHeaderStyle = """
                         background-color: #377a45;
@@ -359,19 +363,7 @@ pipeline{
                                                         def firstIndex       = selectedHost.indexOf('|')+1
                                                         def secondIndex      = selectedHost.indexOf('|',firstIndex)
                                                         def datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Networks:","")
-                                                        def datastoreList    = []
-                                                        def  index =0
-                                                        def nextIndex= -1
-                                                        while(index >-1){
-                                                          nextIndex = datastores.indexOf(';',index)
-                                                                if(nextIndex > -1 ){
-                                                                    datastoreList.add(datastores.substring(index+1,nextIndex  ))
-                                                                }else{
-                                                                    datastoreList.add(datastores.substring(index+1 ))
-                                                                }
-                                                          index  =nextIndex
-                                                          }
-                                                        return [datastores]
+                                                        return [pipeline.getComponents(datastores,";")]
 
                                                        """.stripIndent()
                                                         ]
