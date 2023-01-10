@@ -335,7 +335,7 @@ pipeline{
                                                         script: """
                                                         selectedHost   = ${serverName+"_Host_And_Datastore"}
                                                         selectedHost   = selectedHost.split(':')[-1]
-                                                        return [selectedHost]
+                                                        return ${hostNetworkMap}[selectedHost]
 
                                                        """.stripIndent()
                                                         ]
