@@ -4,6 +4,7 @@ physicalHosts    = []
 vmTemplates      = []
 hostDatastoreMap = [:]
 hostNetworkMap   = [:]
+datastoreSizeMap = [:]
 pipeline         = this;
 
 
@@ -139,6 +140,7 @@ pipeline{
                     }else{
                         vmInformation        =  getVMInfoOthers(params.VCenterServer,params.VCenterUser,params.VCenterPassword)
                     }
+                    println(vmInformation)
                     vmInformation['hosts'].each{
 
                         physicalHosts.add(it.Name)
@@ -151,6 +153,9 @@ pipeline{
                         if(!previousHost||(previousHost==it.HostName)){
 
                             datastoreArray.push( it.DataStoreName)
+                            if(!datastoreSizeMap.keys().contains(it.DataStoreName) ){
+                                datastoreSizeMap[it.DataStoreName] = null
+                            }
 
                         }else{
 
