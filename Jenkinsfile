@@ -360,7 +360,7 @@ pipeline{
                                                         def secondIndex   = selectedHost.indexOf('|',firstIndex)
                                                         datastores     = selectedHost.substring(firstIndex,secondIndex)
                                                         datastoreList  = datastores.split(";")
-                                                        return datastoreList
+                                                        return [datastores]
 
                                                        """.stripIndent()
                                                         ]
@@ -393,8 +393,8 @@ pipeline{
                                                         def firstIndex   = selectedHost.indexOf('|')+1
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
                                                         networks         = selectedHost.substring(secondIndex+1)
-                                                        NetworkList      = networks.split(";")
-                                                        return NetworkList
+                                                        networkList      = networks.split(";")
+                                                        return [networks]
                                                        """.stripIndent()
                                                         ]
                                                     ]
