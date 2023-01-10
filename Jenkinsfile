@@ -174,7 +174,7 @@ pipeline{
 
                     def datastoreOptions = []
                     vmInformation['hostDatastoreMap'].each{
-                    datastoreOptions.add("Datastore: ${it.DataStoreName} | FreeSpace: ${it.FreeSpaceGB} | EsxiHost: ${it.HostName}");
+                    datastoreOptions.add("Datastore: ${it.DataStoreName} | FreeSpaceGB: ${it.FreeSpaceGB} | EsxiHost: ${it.HostName}");
                     }
        
                     
@@ -335,38 +335,7 @@ pipeline{
                                                         script: """
                                                         selectedHost   = ${serverName+"_Host_And_Datastore"}
                                                         originalString = ${hostNetworkMap}
-                                                        optionString = originalString.substring(1,originalString.length() -1)
-
-                                                         hosts = []
-                                                         datastores  =[]
-                                                         hostString  = null;
-                                                         datastoreString = "";
-                                                         hostStoreMap =[:]
-
-                                                         indexOfColon      = optionString.indexOf(':') ;
-                                                         indexOfLastComma  = 0
-
-                                                        while(indexOfColon> 0){
-
-                                                        hostString =  optionString.substring(indexOfLastComma,indexOfColon)
-                                                        if(hostString){
-                                                            hosts.push(hostString.trim())
-                                                        }
-                                                        optionString = optionString.substring(indexOfColon+1)
-                                                        indexOfLastComma =optionString.indexOf(']') ;
-                                                        if(indexOfLastComma > 0){
-                                                        datastoreString= optionString.substring(1,indexOfLastComma)
-                                                        if(datastoreString){
-                                                        datastores.push(datastoreString) 
-                                                        }
                                                         
-                                                        hostStoreMap[hostString] =datastoreString
-                                                        }
-                                                        
-                                                        indexOfLastComma+=2
-                                                        indexOfColon = optionString.indexOf(':') ;
-
-                                                        }
                                                         return [selectedHost]
 
                                                        """.stripIndent()
