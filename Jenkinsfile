@@ -7,10 +7,43 @@ hostNetworkMap   = [:]
 datastoreSpaceMap = [:]
 pipeline         = this;
 
+vmCreationHeaderStyle = """
+                        background-color: #377a45;
+                        text-align: center;
+                        padding: 4px;
+                        color: #fffff;
+                        font-size: 18px;
+                        font-weight: normal;
+                        text-transform: uppercase;
+                        font-family: consolas,'Orienta', sans-serif;
+                        letter-spacing: 1px;
+                        font-style: bold;
+                        """
 
+vmSeparatorHeaderStyle = """
+                        background-color: #3c54cf;
+                        text-align: center;
+                        padding: 4px;
+                        color: #fffff;
+                        font-size: 18px;
+                        font-weight: normal;
+                        text-transform: uppercase;
+                        font-family: consolas,'Orienta', sans-serif;
+                        letter-spacing: 1px;
+                        font-style: bold;
+                    """
+
+subHeaderStyle      ="""
+                        text-align: lef;
+                        padding: 2px;
+                        color: #fffff;
+                        font-size: 16px;
+                        font-weight: normal;
+                        text-transform: uppercase;"""
  properties([
     parameters([
-     string(name:'ServerName', defaultValue:'', description:'The name of the virtual server  (if  only one server is to be created ) or the prefix of the names of the virtual server to be created ( numbers would be appended sequentially to the prefix starting from 1)')
+    separator(name: 'VMCreationHeader', sectionHeader: "Page 1  - Virtual Machine Creation Wizard",separatorStyle: "border-width: 0", sectionHeaderStyle: vmCreationHeaderStyle)
+     ,string(name:'ServerName', defaultValue:'', description:'The name of the virtual server  (if  only one server is to be created ) or the prefix of the names of the virtual server to be created ( numbers would be appended sequentially to the prefix starting from 1)')
 	 ,choice(name:'OperatingSystem', choices: ['Windows','Linux'], description: 'Specify the operating system type of each server')
 	 ,choice(name:'ServerCount',choices: [1,2,3,4,5,6,7,8,9,10], description:'The number of servers to be created')
 	 ,choice(name:'DiskCount',choices: [1,2,3,4],description: 'The  number of hard drives to be added to each server')	
@@ -200,26 +233,7 @@ pipeline{
 
                   //  print(hostNetworkMap)
 
-                    def vmSeparatorHeaderStyle = """
-                        background-color: #3c54cf;
-                        text-align: center;
-                        padding: 4px;
-                        color: #fffff;
-                        font-size: 18px;
-                        font-weight: normal;
-                        text-transform: uppercase;
-                        font-family: consolas,'Orienta', sans-serif;
-                        letter-spacing: 1px;
-                        font-style: bold;
-                    """
 
-                    def subHeaderStyle  ="""
-                        text-align: lef;
-                        padding: 2px;
-                        color: #fffff;
-                        font-size: 16px;
-                        font-weight: normal;
-                        text-transform: uppercase;"""
                     String vmName         =  params.ServerName.toString()
                     int vmCount           =  Integer.parseInt(params.ServerCount)
                     int diskCount         =  Integer.parseInt(params.DiskCount)
@@ -282,7 +296,7 @@ pipeline{
                     //  def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
                         
                     //  vmHostMap = readJSON (text :vmHostMap)
-                    
+                     vmConfigInputParameters.add(separator(name: 'VMCreationHeader', sectionHeader: "Page 2  - Virtual Machine Creation Wizard",separatorStyle: "border-width: 0", sectionHeaderStyle: vmCreationHeaderStyle))
                         for( def k=0; k<vmCount; k++){
                             def indexNatural = k+1
                             def vmIndex      = indexNatural
