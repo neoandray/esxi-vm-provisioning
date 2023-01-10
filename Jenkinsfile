@@ -297,6 +297,23 @@ pipeline{
                     //  def vmHostMap = getVMHostMap(vmName,vmCount,physicalHosts)
                         
                     //  vmHostMap = readJSON (text :vmHostMap)
+
+                    def hostConfigs = []
+					physicalHosts.each{
+						host = it
+						storageList = []
+						networkList = []
+						
+						 vmInformation['hostDatastoreMap'].findAll{it.HostName == host}.each{
+							storageList.add("Datastore: ${it.DataStoreName}, FreeSpaceGB: ${it.FreeSpaceGB}")
+						}
+						
+						nics = vmInformation['hostNetworkMap'].findAll{it.HostName == host}.each{
+							networkList.add("NetworkName: ${it.NetworkName}")
+						}
+						
+						hostConfigs.Add(host+" | Datastores:"+storageList.join(";")+" | networks:"+networkList.join(";"))
+					}
                      vmConfigInputParameters.add(separator(name: 'VMCreationHeader', sectionHeader: "Page 2  - Virtual Machine Creation Wizard",separatorStyle: "border-width: 0", sectionHeaderStyle: vmCreationHeaderStyle))
                         for( def k=0; k<vmCount; k++){
                             def indexNatural = k+1
@@ -310,10 +327,10 @@ pipeline{
                            
                             vmConfigInputParameters.addAll(
                                 [
-                                    separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
+                                    separator(name: "${serverName}_creation_banner", sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
                                     ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
-                                    //,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
-                                    ,choice(name:"${serverName}_Host_And_Datastore", choices: datastoreOptions, description: "Specify the storage and host for ${serverName}")
+                                    ,choice(name:"${serverName}_PhysicalHost", choices: hostConfigs, description: "Specify the physical host for ${serverName}")
+                                    ,//choice(name:"${serverName}_Host_And_Datastore", choices: datastoreOptions, description: "Specify the storage and host for ${serverName}")
                                     ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
                                     ,choice(name:"${serverName}_VmTemplate", choices:vmTemplates , description: "Specify VM Template that would be used to create ${serverName}")
                                 ]
