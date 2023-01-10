@@ -308,7 +308,7 @@ pipeline{
 							storageList.add("Datastore: ${it.DataStoreName}, FreeSpaceGB: ${it.FreeSpaceGB}")
 						}
 						
-						nics = vmInformation['hostNetworkMap'].findAll{it.HostName == host}.each{
+						vmInformation['hostNetworkMap'].findAll{it.HostName == host}.each{
 							networkList.add("NetworkName: ${it.NetworkName}")
 						}
 						
