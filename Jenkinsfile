@@ -6,6 +6,7 @@ hostDatastoreMap = [:]
 hostNetworkMap   = [:]
 datastoreSpaceMap = [:]
 pipeline         = this;
+selectedHost     = "";
 
 vmCreationHeaderStyle = """
                         background-color: #377a45;
@@ -348,7 +349,7 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         selectedHost   = ${serverName+"_Host_And_Datastore"}
-                                                        selectedHost   = selectedHost.split(':')[-1]
+                                                        pipeline.selectedHost   = selectedHost.split(':')[-1]
                                                         return [${hostNetworkMap[selectedHost]}]
 
                                                        """.stripIndent()
