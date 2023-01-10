@@ -361,7 +361,7 @@ pipeline{
                                                         datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Datastores","")
                                                         datastoreList    = []
                                                         index =0
-                                                        while(index >0){
+                                                        while(index >-1){
                                                           nextIndex = datastores.indexOf(';',index)
                                                           if(nextIndex >-1 ){
                                                             datastoreList.add(datastores.substring(index+1,nextIndex  ))
