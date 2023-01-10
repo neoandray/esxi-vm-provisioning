@@ -356,9 +356,11 @@ pipeline{
                                                         classpath: [],   sandbox: true, 
                                                         script: """
                                                         selectedHost   = ${serverName+"_PhysicalHost"}
-                                                        datastores     = selectedHost.split('|')[1].replace("Datastores:","")
+                                                        def firstIndex   = selectedHost.indexOf('|')+1
+                                                        def secondIndex   = selectedHost.indexOf('|',firstIndex)
+                                                        datastores     = selectedHost.substring(firstIndex,secondIndex)
                                                         datastoreList  = datastores.split(";")
-                                                        return [datastores]
+                                                        return [datastoreList]
 
                                                        """.stripIndent()
                                                         ]
@@ -387,10 +389,12 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        selectedHost   = ${serverName+"_PhysicalHost"}
-                                                        networks       = selectedHost.split('|')[2].replace("Networks:","")
-                                                        NetworkList    = networks.split(";")
-                                                        return [selectedHost]
+                                                        selectedHost     = ${serverName+"_PhysicalHost"}
+                                                        def firstIndex   = selectedHost.indexOf('|')+1
+                                                        def secondIndex  = selectedHost.indexOf('|',firstIndex)
+                                                        networks         = selectedHost.substring(secondIndex+1)
+                                                        NetworkList      = networks.split(";")
+                                                        return [NetworkList]
                                                        """.stripIndent()
                                                         ]
                                                     ]
