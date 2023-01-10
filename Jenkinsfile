@@ -174,7 +174,7 @@ pipeline{
 
                     def datastoreOptions = []
                     vmInformation['hostDatastoreMap'].each{
-                    datastoreOptions.add("${it.DataStoreName} | FreeSpace: ${it.FreeSpace} | EsxiHost: ${it.HostName}");
+                    datastoreOptions.add("Datastore: ${it.DataStoreName} | FreeSpace: ${it.FreeSpaceGB} | EsxiHost: ${it.HostName}");
                     }
        
                     
@@ -298,7 +298,7 @@ pipeline{
                                     separator(name: serverName, sectionHeader: "${serverName} Server Specifications",separatorStyle: "border-width: 0", sectionHeaderStyle: vmSeparatorHeaderStyle)
                                     ,string(name:"${serverName}_Name", defaultValue: serverName, description:'Choose a custom name for the new server')
                                     //,choice(name:"${serverName}_PhysicalHost", choices: physicalHosts, description: "Specify the physical host for ${serverName}")
-                                    ,choice(name:"${serverName}_Host_Datastore", choices: datastoreOptions, description: "Specify the storage and host for ${serverName}")
+                                    ,choice(name:"${serverName}_Host_And_Datastore", choices: datastoreOptions, description: "Specify the storage and host for ${serverName}")
                                     ,choice(name:"${serverName}_OS", choices: ['Windows','Linux'], description: "Specify the operating system for ${serverName}")
                                     ,choice(name:"${serverName}_VmTemplate", choices:vmTemplates , description: "Specify VM Template that would be used to create ${serverName}")
                                 ]
@@ -321,7 +321,7 @@ pipeline{
                                          separator(name: "${serverName}_NIC${i}_separator", sectionHeader: "${serverName}_NIC${index} Details",sectionHeaderStyle: subHeaderStyle),
                                         ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
                                             name: "${serverName}_NIC${index}"
-                                            , referencedParameters: "${serverName}_Host_Datastore",
+                                            , referencedParameters: "${serverName}_Host_And_Datastore",
                                             script: [$class: 'GroovyScript',  
                                                         fallbackScript: [
                                                         classpath: [],  sandbox: true, 
@@ -333,7 +333,7 @@ pipeline{
                                                             classpath: [],   sandbox: true, 
                                                         classpath: [],   sandbox: true, 
                                                         script: """
-                                                        selectedHost   = ${serverName+"_Host_Datastore"}
+                                                        selectedHost   = ${serverName+"_Host_And_Datastore"}
                                                         originalString = ${hostNetworkMap}
                                                         optionString = originalString.substring(1,originalString.length() -1)
 
@@ -367,7 +367,7 @@ pipeline{
                                                         indexOfColon = optionString.indexOf(':') ;
 
                                                         }
-                                                        return [originalString]
+                                                        return [selectedHost]
 
                                                        """.stripIndent()
                                                         ]
