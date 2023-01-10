@@ -359,9 +359,9 @@ pipeline{
                                                         def firstIndex       = selectedHost.indexOf('|')+1
                                                         def secondIndex      = selectedHost.indexOf('|',firstIndex)
                                                         def datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Networks:","")
-                                                        datastoreList    = []
-                                                        index =0
-                                                        nextIndex= -1
+                                                        def datastoreList    = []
+                                                        def  index =0
+                                                        def nextIndex= -1
                                                         while(index >-1){
                                                           nextIndex = datastores.indexOf(';',index)
                                                                 if(nextIndex > -1 ){
