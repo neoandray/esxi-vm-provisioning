@@ -358,7 +358,8 @@ pipeline{
                                                         selectedHost     = ${serverName+"_PhysicalHost"}
                                                         def firstIndex   = selectedHost.indexOf('|')+1
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
-                                                        datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Datastores","")
+                                                        datastores       = selectedHost.substring(firstIndex,secondIndex)
+                                                        datastores       = datastores.replace("Datastores:","")
                                                         datastoreList    = []
                                                         }
                                                         return [datastores]
