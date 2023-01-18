@@ -395,7 +395,7 @@ pipeline{
                                                         selectedHost     = ${serverName+"_PhysicalHost"}
                                                         def firstIndex   = selectedHost.indexOf('|')+1
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
-                                                        def networks     = selectedHost.substring(secondIndex+1).replace("Networks:","").toString().split(';')
+                                                        def networks     = selectedHost.substring(secondIndex+1).replace("Networks:","").split(';')
                                                         //def networkList  = networks.toString().split(';')
                                                         return [networks]
                                                        """.stripIndent()
