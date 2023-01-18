@@ -345,8 +345,8 @@ pipeline{
                                 [   
                                     separator(name: "${serverName}_Disk${i}_separator", sectionHeader: "${serverName}_Disk${index} Details",sectionHeaderStyle: subHeaderStyle),
                                     ,choice(name:"${serverName}_Disk${index}_Size",choices: [100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,1050,1100,1150,1200,1250,1300,1350,1400,1450,1500],description: 'The size of each hard drive in GB to be added to the server')	
-                                                                            ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
-                                            name: "${serverName}_Disk${index}_Location"
+                                     ,[$class: 'CascadeChoiceParameter', choiceType: 'PT_SINGLE_SELECT',description:  "The Network PortGroup for NIC ${index} of ${serverName} ",filterLength: 1, filterable: true,
+                                      name: "${serverName}_Disk${index}_Location"
                                             , referencedParameters: "${serverName}_PhysicalHost",
                                             script: [$class: 'GroovyScript',  
                                                         fallbackScript: [
@@ -363,7 +363,7 @@ pipeline{
                                                         def firstIndex       = selectedHost.indexOf('|')+1
                                                         def secondIndex      = selectedHost.indexOf('|',firstIndex)
                                                         def datastores       = selectedHost.substring(firstIndex,secondIndex).replace("Networks:","")
-                                                        return [getComponents(datastores,";")]
+                                                        return [pipeline.getComponents(datastores,";")]
 
                                                        """.stripIndent()
                                                         ]
@@ -396,8 +396,8 @@ pipeline{
                                                         def firstIndex   = selectedHost.indexOf('|')+1
                                                         def secondIndex  = selectedHost.indexOf('|',firstIndex)
                                                         def networks     = selectedHost.substring(secondIndex+1).replace("Networks:","")
-                                                       // def networkList  = networks.split(';')
-                                                        return [networks]
+                                                        def networkList  = networks.toString().split(';')
+                                                        return [networkList]
                                                        """.stripIndent()
                                                         ]
                                                     ]
